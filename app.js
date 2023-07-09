@@ -30,6 +30,6 @@ app.get("/tasks", (req, res) => {
 });
 
 // Iniciar el servidor
-app.listen(3002, () => {
+app.listen(3006, () => {
   console.log("Servidor en funcionamiento en el puerto 3002.");
 });

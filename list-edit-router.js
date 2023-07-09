@@ -16,11 +16,12 @@ module.exports = (tasks, taskIdCounter) => {
       res.status(400).json({ error: "La solicitud no tiene información." });
     } else if (
       req.method === "PUT" &&
-      (!req.body.names || typeof req.body.names !== "string")
+      (req.body.completed === undefined ||
+        typeof req.body.completed !== "boolean")
     ) {
-      res
-        .status(400)
-        .json({ error: "La solicitud no contiene una descripción válida." });
+      res.status(400).json({
+        error: "La solicitud no contiene un estado de completado válido.",
+      });
     } else {
       next();
     }
@@ -60,8 +61,8 @@ module.exports = (tasks, taskIdCounter) => {
 
     const task = tasks.find((task) => task.id === id);
     if (task) {
-      task.completed = true;
-      res.json({ message: "Tarea completada.", task });
+      task.completed = req.body.completed;
+      res.json({ message: "Tarea actualizada.", task });
     } else {
       res
         .status(404)
