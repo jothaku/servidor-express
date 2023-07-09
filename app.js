@@ -7,7 +7,7 @@ const listViewRouter = require("./list-view-router.js");
 const listEditRouter = require("./list-edit-router.js");
 const users = [
   { username: "Jonathan", password: "1234567" },
-  { username: "Andre  s", password: "0011233" },
+  { username: "Andres", password: "0011233" },
 ];
 
 app.use(express.json());
