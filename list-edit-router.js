@@ -1,9 +1,32 @@
 const express = require("express");
 const router = express.Router();
 
-//ruta para la creacion de tareas
 module.exports = (tasks, taskIdCounter) => {
-  router.post("/create", (req, res) => {
+  const validateRequestBody = (req, res, next) => {
+    if (req.method === "POST" && Object.keys(req.body).length === 0) {
+      res.status(400).json({ error: "La solicitud no tiene información." });
+    } else if (
+      req.method === "POST" &&
+      (!req.body.names || typeof req.body.names !== "string")
+    ) {
+      res
+        .status(400)
+        .json({ error: "La solicitud no contiene una descripción válida." });
+    } else if (req.method === "PUT" && Object.keys(req.body).length === 0) {
+      res.status(400).json({ error: "La solicitud no tiene información." });
+    } else if (
+      req.method === "PUT" &&
+      (!req.body.names || typeof req.body.names !== "string")
+    ) {
+      res
+        .status(400)
+        .json({ error: "La solicitud no contiene una descripción válida." });
+    } else {
+      next();
+    }
+  };
+
+  router.post("/create", validateRequestBody, (req, res) => {
     const { names } = req.body;
     const id = taskIdCounter++;
 
@@ -15,35 +38,34 @@ module.exports = (tasks, taskIdCounter) => {
 
     tasks.push(task);
 
-    //respuesta al crear la tarea
     res.json({ message: "La tarea se añadió correctamente.", task });
   });
 
-  //ruta para la eliminacion de tareas
   router.delete("/delete/:id", (req, res) => {
     const id = parseInt(req.params.id);
 
-    //respuesta segun el resultado de la solicitud de eliminacion
     const taskIndex = tasks.findIndex((task) => task.id === id);
     if (taskIndex !== -1) {
       tasks.splice(taskIndex, 1);
-      res.json({ message: "Tarea eliminada ." });
+      res.json({ message: "Tarea eliminada con éxito." });
     } else {
-      res.status(404).json({ error: "No se encontró la tarea especificada." });
+      res
+        .status(404)
+        .json({ error: "No se encontró la tarea con el ID proporcionado." });
     }
   });
 
-  //ruta para actualizar tareas
-  router.put("/update/:id", (req, res) => {
+  router.put("/update/:id", validateRequestBody, (req, res) => {
     const id = parseInt(req.params.id);
 
-    //mensajes de respuesta segun el comando especificado
     const task = tasks.find((task) => task.id === id);
     if (task) {
       task.completed = true;
-      res.json({ message: "Tarea actualizada.", task });
+      res.json({ message: "Tarea completada.", task });
     } else {
-      res.status(404).json({ error: "No se encontró la tarea especificada." });
+      res
+        .status(404)
+        .json({ error: "No se encontró la tarea con el ID proporcionado." });
     }
   });
 
