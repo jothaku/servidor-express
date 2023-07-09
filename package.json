@@ -4,13 +4,12 @@
     "nodemon": "^2.0.22"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "name": "servidor-express",
   "description": "",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC"
