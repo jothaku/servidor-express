@@ -1,3 +1,4 @@
+// list-view-router.js
 const express = require("express");
 const router = express.Router();
 
@@ -13,7 +14,6 @@ const validateParamsMiddleware = (req, res, next) => {
   next(); // Pasar al siguiente middleware o enrutador
 };
 
-// Ruta GET para listar tareas completas
 module.exports = (tasks) => {
   router.get("/completed", (req, res) => {
     const completedTasks = tasks.filter((task) => task.completed);
